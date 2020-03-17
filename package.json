@@ -1,0 +1,30 @@
+{
+  "name": "rest-api-node",
+  "version": "1.0.0",
+  "description": "Sample REST API using Node.js",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MGorelovs/rest-api-node.git"
+  },
+  "author": "Maksim Gorelov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MGorelovs/rest-api-node/issues"
+  },
+  "homepage": "https://github.com/MGorelovs/rest-api-node#readme",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "pg-promise": "^10.4.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
