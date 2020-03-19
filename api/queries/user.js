@@ -1,6 +1,7 @@
 const promise = require('bluebird');
 const bcrypt = require('bcrypt');
 const validator = require("email-validator");
+const jwt = require('jsonwebtoken');
 
 const options = {
     // Initialization Options
@@ -13,8 +14,8 @@ const db = pgp(connectionString);
 
 function signUp(req, res, next) {
     db.any('SELECT * FROM public.users WHERE email = $1', req.body.email)
-        .then(function (data) {
-            if (data.length >= 1) {
+        .then(function (user) {
+            if (user.length >= 1) {
                 return res.status(409).json({
                     message: 'Mail exists'
                 });
@@ -48,6 +49,40 @@ function signUp(req, res, next) {
         })
 }
 
+function logIn(req, res, next) {
+    db.one('SELECT * FROM public.users WHERE email = $1', req.body.email)
+        .then(function (user) {
+            if (user.length < 1) {
+                return res.status(401);
+            }
+            bcrypt.compare(req.body.password, user.password, function (err, result) {
+                if (err) {
+                    return res.status(401);
+                }
+                if (result) {
+                    const token = jwt.sign(
+                        {
+                            email: user.email,
+                            userId: user.id
+                        },
+                        process.env.JWT_KEY,
+                        {
+                            expiresIn: '1h'
+                        }
+                    );
+                    return res.status(200).json({
+                        message: 'Auth successful',
+                        token: token
+                    })
+                }
+                return res.status(401);
+            })
+        })
+        .catch(function (err) {
+            return next(err);
+        });
+}
+
 function removeUser(req, res, next) {
     const userID = parseInt(req.params.userId);
     db.result('DELETE FROM public.users WHERE id = $1', userID)
@@ -65,5 +100,6 @@ function removeUser(req, res, next) {
 
 module.exports = {
     signUp: signUp,
+    logIn: logIn,
     removeUser: removeUser
 };

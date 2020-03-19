@@ -3,6 +3,7 @@
     "SERVER_HOST": "ServerHost",
     "MAIN_DB": "Default database",
     "DB_USER": "username",
-    "DB_PW": "password"
+    "DB_PW": "password",
+    "JWT_KEY": "secret"
   }
 }
