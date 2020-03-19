@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 
 const servicersRoutes = require("./api/routes/servicers");
+const userRoutes = require("./api/routes/user");
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 
 // Routes which should handle requests
 app.use("/servicers", servicersRoutes);
+app.use("/user", userRoutes);
 
 
 app.use((req, res, next) => {
